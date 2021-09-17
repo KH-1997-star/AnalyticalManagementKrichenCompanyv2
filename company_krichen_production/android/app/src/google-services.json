@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "929859461621",
+    "project_id": "sosietekrichenproduction",
+    "storage_bucket": "sosietekrichenproduction.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929859461621:android:0d3160a0d26e08968b80bc",
+        "android_client_info": {
+          "package_name": "com.example.company_krichen_production"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929859461621-cmqos9grk7no8netj3aiom5cvcgs4g69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX0poGdELuEuYinGOpqUUcuA3IG-0RS3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929859461621-cmqos9grk7no8netj3aiom5cvcgs4g69.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
