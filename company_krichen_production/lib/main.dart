@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company_krichen_production/models/final_product.dart';
 import 'package:company_krichen_production/models/user.dart';
 import 'package:company_krichen_production/screens/authentification.dart';
 import 'package:company_krichen_production/screens/change_material_property.dart';
@@ -33,6 +34,10 @@ class MyApp extends StatelessWidget {
         ),
         StreamProvider<QuerySnapshot>.value(
             value: userData.pm, initialData: null),
+        StreamProvider<List<FinalProduct>>.value(
+          value: userData.pf,
+          initialData: [],
+        ),
       ],
       child: MaterialApp(
         theme: myThemeData,

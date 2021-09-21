@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company_krichen_production/models/final_product.dart';
 
 import 'package:company_krichen_production/models/user.dart';
 
@@ -9,7 +10,7 @@ class UserData {
   CollectionReference users = FirebaseFirestore.instance.collection('users'),
       primaryMaterials =
           FirebaseFirestore.instance.collection('primaryMaterials'),
-      pf = FirebaseFirestore.instance.collection('finalProducts');
+      finalProduct = FirebaseFirestore.instance.collection('finalProducts');
 
   Future addUser(cin, name, lastName) async {
     await users.doc(cin).set({
@@ -21,22 +22,28 @@ class UserData {
   }
 
   Future addPrimaryMaterials(
-      ref, quantity, fournisseur, img, price, poids, unity) async {
+      ref, quantity, fournisseur, img, price, unity, prixV) async {
     await primaryMaterials.doc().set({
       'currency': 'dt',
       'reference': ref,
-      'quantity': quantity * poids,
+      'quantity': quantity,
       'fournisseur': fournisseur,
       'image': img ?? '',
-      'weight': poids,
       'price': price,
       'unity': unity,
       'clicked': false,
+      'prix de vente': prixV,
     });
   }
 
-  Future addFinalProduct( Map ingQuantity) async {
-    await pf.doc().set({'ingredients': ingQuantity});
+  Future addFinalProduct(Map ingQuantity, String article, double cout) async {
+    await finalProduct.doc().set({
+      'ingredients': ingQuantity,
+      'article': article,
+      'cout': cout,
+      'currency': 'dt',
+      'image': null,
+    });
   }
 
   Future deleteUser(cin) async {
@@ -55,21 +62,21 @@ class UserData {
     });
   }
 
+  Future updateAnyProp(String collection, prop, val) async {
+    await FirebaseFirestore.instance.collection(collection).doc(id).update({
+      prop: val,
+    });
+  }
+
   Future queryFromUpdatePm(prop, val, id) async {
     await primaryMaterials.doc(id).update({
       prop: val,
     });
   }
 
-  Future addQuantity(weight, quantity) async {
+  Future changeQuantity(double quantity) async {
     await primaryMaterials.doc(id).update({
-      'quantity': FieldValue.increment(weight * quantity),
-    });
-  }
-
-  Future removeQuantity(weight, quantity) async {
-    await primaryMaterials.doc(id).update({
-      'quantity': FieldValue.increment(-(weight * quantity)),
+      'quantity': FieldValue.increment((quantity)),
     });
   }
 
@@ -101,9 +108,25 @@ class UserData {
     }).toList();
   }
 
+  List<FinalProduct> _finalProductListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return FinalProduct(
+        article: doc['article'],
+        cout: doc['cout'],
+        currency: doc['currency'],
+        ingredients: doc['ingredients'],
+        image: doc['image'],
+        id: doc.id,
+      );
+    }).toList();
+  }
+
   Stream<List<UserInfo>> get checkusers {
     return users.snapshots().map(_userListFromSnapshot);
   }
 
   Stream<QuerySnapshot> get pm => primaryMaterials.snapshots();
+
+  Stream<List<FinalProduct>> get pf =>
+      finalProduct.snapshots().map(_finalProductListFromSnapshot);
 }

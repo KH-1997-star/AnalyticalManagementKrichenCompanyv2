@@ -13,19 +13,6 @@ IconButton myLogOutButton(context) {
   );
 }
 
-String dinarFormatConverter(price) {
-  List tab = price.toString().split('');
-  int j = 1;
-  for (var i = 0; i < tab.length; i++) {
-    if (tab[i] != '.' && j == 4) {
-      tab.insert(i, ' ');
-      j = 0;
-    }
-    j++;
-  }
-  return tab.join('') + " dt";
-}
-
 Padding primaryMaterialsRow(int index, str, prop, id, propContent, [name]) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -140,7 +127,8 @@ mySearchingFunction(QuerySnapshot pm, String val, List searchingList,
   }
 }
 
-double pointConverter(List l) {
+double pointConverter(String val) {
+  List l = val.split('');
   for (int i = 0; i < l.length; i += 1) {
     if (l[i] == ',') {
       l[i] = '.';

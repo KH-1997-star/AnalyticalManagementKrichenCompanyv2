@@ -1,53 +1,46 @@
 import 'dart:io';
+
 import 'package:company_krichen_production/services/database.dart';
+import 'package:company_krichen_production/widgets/circular_load.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'circular_load.dart';
+PickedFile imageFile;
 
-// ignore: must_be_immutable
-class CirclePic extends StatefulWidget {
-  String cin, userPic;
-  final double radius;
+class MyImagePicker extends StatefulWidget {
+  final Widget anyWidget;
+  final String id, collection;
+  MyImagePicker({this.anyWidget, this.id, this.collection});
 
-  CirclePic({
-    this.cin,
-    this.radius,
-    this.userPic,
-  });
   @override
-  _CirclePicState createState() => _CirclePicState();
+  _MyImagePickerState createState() => _MyImagePickerState();
 }
 
-class _CirclePicState extends State<CirclePic> {
+class _MyImagePickerState extends State<MyImagePicker> {
   PickedFile imageFile;
+
   String imageUrl = '';
+
   bool downloading = false;
 
   @override
   Widget build(BuildContext context) {
     return downloading
-        ? CircleAvatar(
-            radius: widget.radius,
-            child: CircularLoad(),
-            backgroundColor: Colors.black,
+        ? SizedBox(
+            height: 80,
+            width: 100,
+            child: Container(
+              color: Colors.black,
+              child: CircularLoad(),
+            ),
           )
         : GestureDetector(
-            onTap: () async => await showModalBottomSheet(
-              context: context,
-              builder: (builder) => bottomSheet(),
-            ),
-            child: CircleAvatar(
-              radius: widget.radius,
-              backgroundImage: widget.userPic == null
-                  ? AssetImage('assets/images/user.png')
-                  : NetworkImage(
-                      widget.userPic,
-                    ),
-              backgroundColor: Colors.white,
-            ),
-          );
+            onTap: () => showModalBottomSheet(
+                  context: context,
+                  builder: (builder) => bottomSheet(),
+                ),
+            child: widget.anyWidget);
   }
 
   Widget bottomSheet() {
@@ -102,17 +95,17 @@ class _CirclePicState extends State<CirclePic> {
         downloading = true;
       });
       var snapshot = await FirebaseStorage.instance
-          .ref(widget.cin)
+          .ref(widget.id)
           .child(file.path)
           .putFile(file);
 
       var downloadUrl = await snapshot.ref.getDownloadURL();
       setState(() {
-        widget.userPic = downloadUrl;
+        imageUrl = downloadUrl;
       });
 
-      await UserData(cin: widget.cin)
-          .upDateProp('userPic', downloadUrl)
+      await UserData(id: widget.id)
+          .updateAnyProp(widget.collection, 'image', downloadUrl)
           .then((value) => setState(() {
                 downloading = false;
               }));

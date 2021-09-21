@@ -31,7 +31,7 @@ class _PriamryMaterialsState extends State<PriamryMaterials> {
                 right: 10,
                 left: 10,
               ),
-              childAspectRatio: 0.37,
+              childAspectRatio: 0.4,
               crossAxisSpacing: 4.0,
               mainAxisSpacing: 4.0,
               crossAxisCount: 2,
@@ -68,16 +68,16 @@ class _PriamryMaterialsState extends State<PriamryMaterials> {
                         PrimaryMaterialRow(
                           id: pm.docs[index].id,
                           index: index,
-                          str: 'PU',
+                          str: 'PA',
                           prop: 'price',
                           unity: pm.docs[index]['currency'],
                         ),
                         PrimaryMaterialRow(
                           id: pm.docs[index].id,
                           index: index,
-                          str: 'P',
-                          prop: 'weight',
-                          unity: pm.docs[index]['unity'],
+                          str: 'PV',
+                          prop: 'prix de vente',
+                          unity: pm.docs[index]['currency'],
                         ),
                         PrimaryMaterialRow(
                           id: pm.docs[index].id,
@@ -95,10 +95,13 @@ class _PriamryMaterialsState extends State<PriamryMaterials> {
                         Divider(
                           thickness: 1,
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         RowFloatingButtons(
                           index: index,
                           id: pm.docs[index].id,
-                          weight: pm.docs[index]['weight'],
+                          quantity: pm.docs[index]['quantity'],
                         ),
                         WillPopScope(
                             child: Text(''),

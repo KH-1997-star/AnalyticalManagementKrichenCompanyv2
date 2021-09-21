@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:company_krichen_production/models/Ingredients.dart';
 import 'package:company_krichen_production/services/database.dart';
 import 'package:company_krichen_production/utils/consts.dart';
 
@@ -10,19 +9,23 @@ class CreatePF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pm = Provider.of<QuerySnapshot>(context);
-    List<Ingredients> myNumbers = [];
     final formKey = GlobalKey<FormState>();
-
-    List selectedItems = [];
-    List refList = [];
-    List valueList = [];
+    List selectedItems = [],
+        refList = [],
+        quantityList = [],
+        idList = [],
+        priceList = [];
+    String nomArticle = '';
+    double cout = 0;
 
     pm.docs.forEach((doc) {
       if (doc['clicked']) {
         selectedItems.add(doc);
         int len = selectedItems.length;
+        idList.add(doc.id);
+        priceList.add(doc['price']);
         refList.length = len;
-        valueList.length = len;
+        quantityList.length = len;
       }
     });
 
@@ -50,11 +53,25 @@ class CreatePF extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+                width: 200,
+                height: 50,
+                child: TextFormField(
+                  validator: (val) => val.isEmpty
+                      ? 'nom d\'article ne peut pas etre vide'
+                      : null,
+                  onChanged: (val) => nomArticle = val,
+                  decoration: InputDecoration(hintText: 'nom d\'article'),
+                )),
             Expanded(
               child: ListView.builder(
                 itemCount: selectedItems.length,
                 itemBuilder: (context, index) {
                   refList[index] = selectedItems[index]['reference'];
+
                   return Column(
                     children: [
                       SizedBox(
@@ -69,9 +86,8 @@ class CreatePF extends StatelessWidget {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               onChanged: (val) {
-                                List myVal = val.split('');
-
-                                valueList[index] = pointConverter(myVal);
+                                quantityList[index] = pointConverter(val);
+                                if (quantityList[index] != null) {}
                               },
                               validator: (val) => val.isEmpty
                                   ? 'ce champ ne peut pas etre vmaide'
@@ -96,20 +112,20 @@ class CreatePF extends StatelessWidget {
         child: Icon(Icons.done),
         onPressed: () async {
           if (formKey.currentState.validate()) {
-            for (int i = 0; i < valueList.length; i++) {
-              await myNumbers.add(
-                Ingredients(
-                  reference: refList[i],
-                  quantity: valueList[i],
-                ),
-              );
-            }
             Map myIngredients = {
-              'ingredients': refList,
-              'quantity': valueList,
+              'reference': refList,
+              'quantity': quantityList,
             };
-            UserData().addFinalProduct(myIngredients);
-            print(myIngredients);
+
+            for (int i = 0; i < selectedItems.length; i++) {
+              await UserData(id: idList[i]).changeQuantity(-quantityList[i]);
+              cout += priceList[i] * quantityList[i];
+            }
+            await UserData().addFinalProduct(myIngredients, nomArticle, cout);
+            Navigator.popUntil(
+              context,
+              ModalRoute.withName('/produit_fini'),
+            );
           }
         },
       ),

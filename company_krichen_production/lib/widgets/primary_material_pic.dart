@@ -28,6 +28,7 @@ class _CirclePicState extends State<MaterialPrimaryPic> {
 
   @override
   Widget build(BuildContext context) {
+    final pm = Provider.of<QuerySnapshot>(context);
     return downloading
         ? SizedBox(
             height: 80,
@@ -39,25 +40,18 @@ class _CirclePicState extends State<MaterialPrimaryPic> {
           )
         : GestureDetector(
             onTap: () => showModalBottomSheet(
-              context: context,
-              builder: (builder) => bottomSheet(),
-            ),
-            child: StreamProvider<QuerySnapshot>.value(
-                initialData: null,
-                value: UserData().pm,
-                builder: (context, child) {
-                  final pm = Provider.of<QuerySnapshot>(context);
-                  return SizedBox(
-                    height: 120,
-                    width: 150,
-                    child: pm != null
-                        ? pm.docs[widget.index]['image'] == ''
-                            ? Image.asset('assets/images/camera.png')
-                            : Image.network(pm.docs[widget.index]['image'])
-                        : Text('loading data please wait...'),
-                  );
-                }),
-          );
+                  context: context,
+                  builder: (builder) => bottomSheet(),
+                ),
+            child: SizedBox(
+              height: 120,
+              width: 150,
+              child: pm != null
+                  ? pm.docs[widget.index]['image'] == ''
+                      ? Image.asset('assets/images/camera.png')
+                      : Image.network(pm.docs[widget.index]['image'])
+                  : Text('loading data please wait...'),
+            ));
   }
 
   Widget bottomSheet() {

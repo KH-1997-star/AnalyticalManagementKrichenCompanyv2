@@ -1,4 +1,5 @@
 import 'package:company_krichen_production/services/database.dart';
+import 'package:company_krichen_production/utils/consts.dart';
 import 'package:flutter/material.dart';
 
 class AddPrimaryMaterialsFloatingButton extends StatefulWidget {
@@ -11,7 +12,7 @@ class _AddPrimaryMaterialsFloatingButtonState
     extends State<AddPrimaryMaterialsFloatingButton> {
   final _formKey = GlobalKey<FormState>();
   String ref = '', fournisseur = '', type = '', img = '', unity = '';
-  double quantity = 0, price = 0, poids = 0;
+  double quantity = 0, price = 0, poids = 0, prixV;
 
   List listItem = ['kg', 'L'];
   @override
@@ -32,9 +33,9 @@ class _AddPrimaryMaterialsFloatingButtonState
             return StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
-                  title: Text('Ajouter Utilisateur matière premiére'),
+                  title: Text('Ajouter matière premiére'),
                   content: Text(
-                    'veuillez remplir les donées de nouelle matière premiére.',
+                    'veuillez remplir les donées de nouvelle matière premiére.',
                     textAlign: TextAlign.center,
                   ),
                   actions: [
@@ -63,12 +64,12 @@ class _AddPrimaryMaterialsFloatingButtonState
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
                                     onChanged: (val) =>
-                                        poids = double.parse(val),
+                                        quantity = pointConverter(val),
                                     validator: (val) => val.isEmpty
-                                        ? 'prix unitaire ne peut pas etre vide'
+                                        ? 'quantité ne peut pas etre vide'
                                         : null,
                                     decoration: InputDecoration(
-                                      hintText: 'poid en kg ou litrage',
+                                      hintText: 'quantité en kg ou litrage',
                                     ),
                                   ),
                                 ),
@@ -99,37 +100,29 @@ class _AddPrimaryMaterialsFloatingButtonState
                             ),
                             TextFormField(
                               keyboardType: TextInputType.number,
-                              onChanged: (val) => quantity = double.parse(val),
-                              validator: (val) => val.isEmpty
-                                  ? 'quantité ne peut pas etre vide'
-                                  : null,
-                              decoration: InputDecoration(
-                                hintText: 'quantité',
-                              ),
-                            ),
-                            TextFormField(
-                              keyboardType: TextInputType.number,
-                              onChanged: (val) => price = double.parse(val),
+                              onChanged: (val) => price = pointConverter(val),
                               validator: (val) => val.isEmpty
                                   ? 'prix ne peut pas etre vide'
                                   : null,
                               decoration: InputDecoration(
-                                hintText: 'prix unitaire',
+                                hintText: 'prix d\'achat par kg/l',
+                              ),
+                            ),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
+                              onChanged: (val) => prixV = pointConverter(val),
+                              validator: (val) => val.isEmpty
+                                  ? 'prix ne peut pas etre vide'
+                                  : null,
+                              decoration: InputDecoration(
+                                hintText: 'prix de vente par kg/l',
                               ),
                             ),
                             TextButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  setState(() {
-                                    UserData().addPrimaryMaterials(
-                                        ref,
-                                        quantity,
-                                        fournisseur,
-                                        img,
-                                        price,
-                                        poids,
-                                        unity);
-                                  });
+                                  UserData().addPrimaryMaterials(ref, quantity,
+                                      fournisseur, img, price, unity, prixV);
 
                                   Navigator.pop(context);
                                   setState(() {});
