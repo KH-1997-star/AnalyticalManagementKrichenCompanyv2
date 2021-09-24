@@ -5,6 +5,7 @@ class FinalProduct {
   final Map ingredients;
   final String image;
   final String id;
+  final double litre;
 
   FinalProduct(
       {this.article,
@@ -12,5 +13,6 @@ class FinalProduct {
       this.currency,
       this.ingredients,
       this.image,
-      this.id});
+      this.id,
+      this.litre});
 }

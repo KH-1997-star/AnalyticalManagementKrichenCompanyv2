@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company_krichen_production/models/final_product.dart';
 
 import 'package:company_krichen_production/models/user.dart';
+import 'package:company_krichen_production/utils/alert.dart';
+import 'package:flutter/material.dart';
 
 class UserData {
   final String cin;
@@ -36,13 +40,16 @@ class UserData {
     });
   }
 
-  Future addFinalProduct(Map ingQuantity, String article, double cout) async {
+  Future addFinalProduct(
+      Map ingQuantity, String article, double cout, double litre) async {
     await finalProduct.doc().set({
       'ingredients': ingQuantity,
       'article': article,
       'cout': cout,
       'currency': 'dt',
       'image': null,
+      'litre': litre,
+      'melange': 0,
     });
   }
 
@@ -97,6 +104,21 @@ class UserData {
     return querySnapshots;
   }
 
+  Future<QuerySnapshot> queryDataByFiled(
+    val,
+    quantity,
+  ) async {
+    String myId = '';
+    await primaryMaterials
+        .where('reference', isEqualTo: val)
+        .get()
+        .then((QuerySnapshot snapshot) => snapshot.docs.forEach((element) {
+              myId = element.id;
+              UserData(id: myId).changeQuantity(quantity);
+            }));
+    return null;
+  }
+
   List<UserInfo> _userListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return UserInfo(
@@ -116,6 +138,7 @@ class UserData {
         currency: doc['currency'],
         ingredients: doc['ingredients'],
         image: doc['image'],
+        litre: doc['litre'],
         id: doc.id,
       );
     }).toList();

@@ -5,6 +5,7 @@ import 'package:company_krichen_production/screens/authentification.dart';
 import 'package:company_krichen_production/screens/change_material_property.dart';
 import 'package:company_krichen_production/screens/choice_pm.dart';
 import 'package:company_krichen_production/screens/create_pf.dart';
+import 'package:company_krichen_production/screens/fiche_tech.dart';
 import 'package:company_krichen_production/screens/gerer_utilisateur.dart';
 import 'package:company_krichen_production/screens/loading.dart';
 import 'package:company_krichen_production/screens/matiere_premiere.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          '/': (context) => Loading(),
+          '/': (context) => Loading(), 
           '/authentif': (context) => Authentification(),
           '/menu': (context) => Menu(),
           '/gerer_user': (context) => GererUser(),
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
           '/produit_fini': (context) => ProduitFini(),
           '/choice_pm': (context) => ChoicePM(),
           '/create_pf': (context) => CreatePF(),
+          '/fiche_technique_article': (context) => FicheTechArticle(),
         },
       ),
     );

@@ -14,9 +14,11 @@ class CreatePF extends StatelessWidget {
         refList = [],
         quantityList = [],
         idList = [],
-        priceList = [];
+        priceList = [],
+        unityList = [];
     String nomArticle = '';
     double cout = 0;
+    double litre = 0;
 
     pm.docs.forEach((doc) {
       if (doc['clicked']) {
@@ -24,6 +26,7 @@ class CreatePF extends StatelessWidget {
         int len = selectedItems.length;
         idList.add(doc.id);
         priceList.add(doc['price']);
+        unityList.add(doc['unity']);
         refList.length = len;
         quantityList.length = len;
       }
@@ -65,6 +68,15 @@ class CreatePF extends StatelessWidget {
                       : null,
                   onChanged: (val) => nomArticle = val,
                   decoration: InputDecoration(hintText: 'nom d\'article'),
+                )),
+            SizedBox(
+                width: 200,
+                height: 50,
+                child: TextFormField(
+                  validator: (val) =>
+                      val.isEmpty ? 'ce champ ne peut etre vide' : null,
+                  onChanged: (val) => litre = double.parse(val),
+                  decoration: InputDecoration(hintText: 'litrage totales'),
                 )),
             Expanded(
               child: ListView.builder(
@@ -115,13 +127,19 @@ class CreatePF extends StatelessWidget {
             Map myIngredients = {
               'reference': refList,
               'quantity': quantityList,
+              'unity': unityList,
             };
 
             for (int i = 0; i < selectedItems.length; i++) {
-              await UserData(id: idList[i]).changeQuantity(-quantityList[i]);
+              //await UserData(id: idList[i]).changeQuantity(-quantityList[i]);
               cout += priceList[i] * quantityList[i];
             }
-            await UserData().addFinalProduct(myIngredients, nomArticle, cout);
+            await UserData().addFinalProduct(
+              myIngredients,
+              nomArticle,
+              cout,
+              litre,
+            );
             Navigator.popUntil(
               context,
               ModalRoute.withName('/produit_fini'),

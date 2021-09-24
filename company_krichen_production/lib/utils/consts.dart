@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company_krichen_production/models/final_product.dart';
 import 'package:company_krichen_production/services/database.dart';
+import 'package:company_krichen_production/utils/alert.dart';
 import 'package:company_krichen_production/widgets/wiating_data_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -135,4 +137,13 @@ double pointConverter(String val) {
     }
   }
   return double.parse(l.join());
+}
+
+void melangeChanger(List<FinalProduct> pf, int myIndex, int len, context) {
+  for (int i = 0; i < len; i += 1) {
+    UserData().queryDataByFiled(pf[myIndex].ingredients['reference'][i],
+        -pf[myIndex].ingredients['quantity'][i]);
+  }
+  Navigator.pop(context);
+  alertShow(context, 'Notice', 'votre melange est crée avec suceé');
 }
