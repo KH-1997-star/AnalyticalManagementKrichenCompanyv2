@@ -75,9 +75,17 @@ class CreatePF extends StatelessWidget {
                 width: 200,
                 height: 50,
                 child: TextFormField(
-                  validator: (val) =>
-                      val.isEmpty ? 'ce champ ne peut etre vide' : null,
-                  onChanged: (val) => litre = double.parse(val),
+                  keyboardType: TextInputType.number,
+                  validator: (val) {
+                    String erreur;
+                    if (val.isEmpty) {
+                      erreur = 'ce champ ne peut pas etre vide';
+                    } else if (val.contains('-')) {
+                      erreur = 'ce champ ne peut pas etre negatif';
+                    }
+                    return erreur;
+                  },
+                  onChanged: (val) => litre = pointConverter(val),
                   decoration: InputDecoration(hintText: 'litrage totales'),
                 )),
             Expanded(
@@ -103,9 +111,15 @@ class CreatePF extends StatelessWidget {
                                 quantityList[index] = pointConverter(val);
                                 if (quantityList[index] != null) {}
                               },
-                              validator: (val) => val.isEmpty
-                                  ? 'ce champ ne peut pas etre vide'
-                                  : null,
+                              validator: (val) {
+                                String erreur;
+                                if (val.isEmpty) {
+                                  erreur = 'ce champ ne peut pas etre vide';
+                                } else if (val.contains('-')) {
+                                  erreur = 'ce champ ne peut pas etre negatif';
+                                }
+                                return erreur;
+                              },
                               decoration: InputDecoration(
                                 hintText:
                                     '${selectedItems[index]['reference']} en ${selectedItems[index]['unity']}',

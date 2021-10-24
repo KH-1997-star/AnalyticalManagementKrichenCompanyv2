@@ -19,6 +19,7 @@ class _PriamryMaterialsState extends State<PriamryMaterials> {
 
     return pm != null
         ? Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
                 title: Text('Matière Première'),
                 leading: IconButton(

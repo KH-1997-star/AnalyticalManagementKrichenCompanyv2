@@ -153,19 +153,35 @@ class _RowFloatingButtonsState extends State<RowFloatingButtons> {
                                   keyboardType: TextInputType.number,
                                   onChanged: (val) =>
                                       quantity = pointConverter(val),
-                                  validator: (val) => val.isEmpty
-                                      ? 'quantité ne peut pas etre vide'
-                                      : null,
+                                  validator: (val) {
+                                    String erreur;
+                                    if (val.isEmpty) {
+                                      erreur = 'ce champ ne peut pas etre vide';
+                                    } else if (val.contains('-')) {
+                                      erreur =
+                                          'ce champ ne peut pas etre negatif';
+                                    }
+                                    return erreur;
+                                  },
                                   decoration:
                                       InputDecoration(hintText: 'quantité'),
                                 ),
                                 TextButton(
                                     onPressed: () async {
                                       if (formKey.currentState.validate()) {
-                                        await UserData(id: widget.id)
-                                            .changeQuantity(-quantity);
-                                        Navigator.pushNamed(
-                                            context, '/matiere_premiere');
+                                        if (pm.docs[widget.index]['quantity'] -
+                                                quantity >=
+                                            0) {
+                                          await UserData(id: widget.id)
+                                              .changeQuantity(-quantity);
+                                          Navigator.pushNamed(
+                                              context, '/matiere_premiere');
+                                        } else {
+                                          Navigator.pushNamed(
+                                              context, '/matiere_premiere');
+                                          alertShow(context, 'Attention',
+                                              'quantité totale inférieur a la quantite à vendre');
+                                        }
                                       }
                                     },
                                     child: Text(
@@ -213,9 +229,16 @@ class _RowFloatingButtonsState extends State<RowFloatingButtons> {
                                   keyboardType: TextInputType.number,
                                   onChanged: (val) =>
                                       quantity = pointConverter(val),
-                                  validator: (val) => val.isEmpty
-                                      ? 'quantité ne peut pas etre vide'
-                                      : null,
+                                  validator: (val) {
+                                    String erreur;
+                                    if (val.isEmpty) {
+                                      erreur = 'ce champ ne peut pas etre vide';
+                                    } else if (val.contains('-')) {
+                                      erreur =
+                                          'ce champ ne peut pas etre negatif';
+                                    }
+                                    return erreur;
+                                  },
                                   decoration:
                                       InputDecoration(hintText: 'quantité'),
                                 ),

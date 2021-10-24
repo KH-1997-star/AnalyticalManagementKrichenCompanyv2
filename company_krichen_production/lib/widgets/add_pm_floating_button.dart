@@ -65,9 +65,17 @@ class _AddPrimaryMaterialsFloatingButtonState
                                     keyboardType: TextInputType.number,
                                     onChanged: (val) =>
                                         quantity = pointConverter(val),
-                                    validator: (val) => val.isEmpty
-                                        ? 'quantité ne peut pas etre vide'
-                                        : null,
+                                    validator: (val) {
+                                      String erreur;
+                                      if (val.isEmpty) {
+                                        erreur =
+                                            'ce champ ne peut pas etre vide';
+                                      } else if (val.contains('-')) {
+                                        erreur =
+                                            'ce champ ne peut pas etre negatif';
+                                      }
+                                      return erreur;
+                                    },
                                     decoration: InputDecoration(
                                       hintText: 'quantité en kg ou litrage',
                                     ),
@@ -102,9 +110,15 @@ class _AddPrimaryMaterialsFloatingButtonState
                               keyboardType: TextInputType.number,
                               onChanged: (val) =>
                                   minQuantity = pointConverter(val),
-                              validator: (val) => val.isEmpty
-                                  ? 'prix ne peut pas etre vide'
-                                  : null,
+                              validator: (val) {
+                                String erreur;
+                                if (val.isEmpty) {
+                                  erreur = 'ce champ ne peut pas etre vide';
+                                } else if (val.contains('-')) {
+                                  erreur = 'ce champ ne peut pas etre negatif';
+                                }
+                                return erreur;
+                              },
                               decoration: InputDecoration(
                                 hintText: 'quantité minimale',
                               ),
@@ -112,9 +126,15 @@ class _AddPrimaryMaterialsFloatingButtonState
                             TextFormField(
                               keyboardType: TextInputType.number,
                               onChanged: (val) => price = pointConverter(val),
-                              validator: (val) => val.isEmpty
-                                  ? 'prix ne peut pas etre vide'
-                                  : null,
+                              validator: (val) {
+                                String erreur;
+                                if (val.isEmpty) {
+                                  erreur = 'ce champ ne peut pas etre vide';
+                                } else if (val.contains('-')) {
+                                  erreur = 'ce champ ne peut pas etre negatif';
+                                }
+                                return erreur;
+                              },
                               decoration: InputDecoration(
                                 hintText: 'prix d\'achat par kg/l',
                               ),
@@ -122,9 +142,15 @@ class _AddPrimaryMaterialsFloatingButtonState
                             TextFormField(
                               keyboardType: TextInputType.number,
                               onChanged: (val) => prixV = pointConverter(val),
-                              validator: (val) => val.isEmpty
-                                  ? 'prix ne peut pas etre vide'
-                                  : null,
+                              validator: (val) {
+                                String erreur;
+                                if (val.isEmpty) {
+                                  erreur = 'ce champ ne peut pas etre vide';
+                                } else if (val.contains('-')) {
+                                  erreur = 'ce champ ne peut pas etre negatif';
+                                }
+                                return erreur;
+                              },
                               decoration: InputDecoration(
                                 hintText: 'prix de vente par kg/l',
                               ),
