@@ -12,7 +12,7 @@ class _AddPrimaryMaterialsFloatingButtonState
     extends State<AddPrimaryMaterialsFloatingButton> {
   final _formKey = GlobalKey<FormState>();
   String ref = '', fournisseur = '', type = '', img = '', unity = '';
-  double quantity = 0, price = 0, poids = 0, prixV;
+  double quantity = 0, price = 0, poids = 0, prixV, minQuantity = 0;
 
   List listItem = ['kg', 'L'];
   @override
@@ -100,6 +100,17 @@ class _AddPrimaryMaterialsFloatingButtonState
                             ),
                             TextFormField(
                               keyboardType: TextInputType.number,
+                              onChanged: (val) =>
+                                  minQuantity = pointConverter(val),
+                              validator: (val) => val.isEmpty
+                                  ? 'prix ne peut pas etre vide'
+                                  : null,
+                              decoration: InputDecoration(
+                                hintText: 'quantité minimale',
+                              ),
+                            ),
+                            TextFormField(
+                              keyboardType: TextInputType.number,
                               onChanged: (val) => price = pointConverter(val),
                               validator: (val) => val.isEmpty
                                   ? 'prix ne peut pas etre vide'
@@ -121,8 +132,16 @@ class _AddPrimaryMaterialsFloatingButtonState
                             TextButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  UserData().addPrimaryMaterials(ref, quantity,
-                                      fournisseur, img, price, unity, prixV);
+                                  UserData().addPrimaryMaterials(
+                                    ref,
+                                    quantity,
+                                    fournisseur,
+                                    img,
+                                    price,
+                                    unity,
+                                    prixV,
+                                    minQuantity,
+                                  );
 
                                   Navigator.pop(context);
                                   setState(() {});

@@ -1,12 +1,13 @@
 import 'package:company_krichen_production/models/final_product.dart';
-import 'package:company_krichen_production/utils/take_photo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ArticleWidget extends StatefulWidget {
   final int index;
 
-  ArticleWidget({this.index});
+  ArticleWidget({
+    this.index,
+  });
 
   @override
   _ArticleWidgetState createState() => _ArticleWidgetState();
@@ -15,7 +16,8 @@ class ArticleWidget extends StatefulWidget {
 class _ArticleWidgetState extends State<ArticleWidget> {
   String userPic;
 
-  bool downloading = false;
+  bool downloading = false, searching = false;
+  List searchingList = [], indexList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
       child: InkWell(
         onTap: () => Navigator.pushNamed(context, '/fiche_technique_article',
             arguments: {
-              'index': widget.index,
+              'id': pf[widget.index].id,
             }),
         child: Column(
           children: [
@@ -46,28 +48,18 @@ class _ArticleWidgetState extends State<ArticleWidget> {
               ),
             ),
             InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context, '/fiche_technique_article',
-                  arguments: {
-                    'index': widget.index,
-                  }),
+              onTap: () {
+                Navigator.pushNamed(context, '/fiche_technique_article',
+                    arguments: {
+                      'id': pf[widget.index].id,
+                    });
+              },
               child: Text(
                 pf[widget.index].article,
                 style: TextStyle(
                     color: Colors.grey[400],
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
-              ),
-            ),
-            InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context, '/fiche_technique_article',
-                  arguments: {
-                    'index': widget.index,
-                  }),
-              child: Text(
-                '${pf[widget.index].cout} ${pf[widget.index].currency}',
-                style: TextStyle(fontSize: 18),
               ),
             ),
           ],

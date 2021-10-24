@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company_krichen_production/services/database.dart';
 import 'package:company_krichen_production/utils/consts.dart';
+import 'package:company_krichen_production/widgets/norml_list_view.dart';
+import 'package:company_krichen_production/widgets/searching_list_view.dart';
 import 'package:company_krichen_production/widgets/wiating_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +15,15 @@ class ChoicePM extends StatefulWidget {
 class _ChoicePMState extends State<ChoicePM> {
   bool searching = false, done = false;
   List listCounter = [];
-  TextEditingController textEditingController = TextEditingController();
   List searchingList = [], indexList = [];
   List clickedList = [];
-  var querySnapshot;
+
   @override
   void initState() {
     super.initState();
-    querySnapshot = UserData().unselectAll().then((value) => setState(() {
+    UserData().unselectAll().then((value) => setState(() {
           done = true;
         }));
-        
   }
 
   Widget build(BuildContext context) {
@@ -47,7 +47,6 @@ class _ChoicePMState extends State<ChoicePM> {
               children: [
                 searching
                     ? TextField(
-                        controller: textEditingController,
                         onChanged: (val) {
                           setState(() {
                             mySearchingFunction(
@@ -55,6 +54,7 @@ class _ChoicePMState extends State<ChoicePM> {
                               val,
                               searchingList,
                               indexList,
+                              'reference',
                               clickedList,
                             );
                           });
@@ -72,9 +72,14 @@ class _ChoicePMState extends State<ChoicePM> {
                     : Text(''),
                 Expanded(
                   child: !searchingList.isEmpty && searching
-                      ? mySearchListView(
-                          indexList, pm, searchingList, clickedList)
-                      : normalListView(pm),
+                      ? SearchingListView(
+                          indexList: indexList,
+                          searchingList: searchingList,
+                          clickedList: clickedList,
+                        )
+                      : NormalListView(
+                          pm: pm,
+                        ),
                 ),
               ],
             ),

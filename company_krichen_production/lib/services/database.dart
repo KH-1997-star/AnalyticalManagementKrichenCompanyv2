@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company_krichen_production/models/final_product.dart';
 
 import 'package:company_krichen_production/models/user.dart';
-import 'package:company_krichen_production/utils/alert.dart';
-import 'package:flutter/material.dart';
 
 class UserData {
   final String cin;
@@ -26,7 +22,7 @@ class UserData {
   }
 
   Future addPrimaryMaterials(
-      ref, quantity, fournisseur, img, price, unity, prixV) async {
+      ref, quantity, fournisseur, img, price, unity, prixV, double min) async {
     await primaryMaterials.doc().set({
       'currency': 'dt',
       'reference': ref,
@@ -37,11 +33,12 @@ class UserData {
       'unity': unity,
       'clicked': false,
       'prix de vente': prixV,
+      'minQuantity': min
     });
   }
 
-  Future addFinalProduct(
-      Map ingQuantity, String article, double cout, double litre) async {
+  Future addFinalProduct(Map ingQuantity, String article, double cout,
+      double litre, List id) async {
     await finalProduct.doc().set({
       'ingredients': ingQuantity,
       'article': article,
@@ -50,6 +47,8 @@ class UserData {
       'image': null,
       'litre': litre,
       'melange': 0,
+      'hide': false,
+      'idList': id,
     });
   }
 
@@ -87,6 +86,12 @@ class UserData {
     });
   }
 
+  Future addMelange() async {
+    await finalProduct.doc(id).update({
+      'melange': FieldValue.increment((1)),
+    });
+  }
+
   Future deletePmDoc() async {
     await primaryMaterials.doc(id).delete();
   }
@@ -114,7 +119,24 @@ class UserData {
         .get()
         .then((QuerySnapshot snapshot) => snapshot.docs.forEach((element) {
               myId = element.id;
+              print('quantité' + element['quantity'].toString());
+
               UserData(id: myId).changeQuantity(quantity);
+            }));
+    return null;
+  }
+
+  Future<QuerySnapshot> checkQuantity(
+      val, List<String> alertList, ingrdientQuantity) async {
+    await primaryMaterials
+        .where('reference', isEqualTo: val)
+        .get()
+        .then((QuerySnapshot snapshot) => snapshot.docs.forEach((element) {
+              if (element['quantity'] < ingrdientQuantity) {
+                alertList.add(
+                    '${element['reference']} n\'est pas suffisant pour crée ce mélange.');
+                print('added');
+              }
             }));
     return null;
   }
@@ -139,7 +161,10 @@ class UserData {
         ingredients: doc['ingredients'],
         image: doc['image'],
         litre: doc['litre'],
+        hide: doc['hide'],
         id: doc.id,
+        idList: doc['idList'],
+        melange: doc['melange'],
       );
     }).toList();
   }

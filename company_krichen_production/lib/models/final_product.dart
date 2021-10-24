@@ -6,6 +6,9 @@ class FinalProduct {
   final String image;
   final String id;
   final double litre;
+  final bool hide;
+  final List idList;
+  final int melange;
 
   FinalProduct(
       {this.article,
@@ -14,5 +17,8 @@ class FinalProduct {
       this.ingredients,
       this.image,
       this.id,
-      this.litre});
+      this.litre,
+      this.hide,
+      this.idList,
+      this.melange});
 }

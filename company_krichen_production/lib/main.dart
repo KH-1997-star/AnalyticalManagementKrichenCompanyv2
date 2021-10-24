@@ -10,6 +10,7 @@ import 'package:company_krichen_production/screens/gerer_utilisateur.dart';
 import 'package:company_krichen_production/screens/loading.dart';
 import 'package:company_krichen_production/screens/matiere_premiere.dart';
 import 'package:company_krichen_production/screens/menu.dart';
+import 'package:company_krichen_production/screens/problem_page.dart';
 import 'package:company_krichen_production/screens/produit_fini.dart';
 import 'package:company_krichen_production/services/database.dart';
 import 'package:company_krichen_production/utils/my_theme_data.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          '/': (context) => Loading(), 
+          '/': (context) => Loading(),
           '/authentif': (context) => Authentification(),
           '/menu': (context) => Menu(),
           '/gerer_user': (context) => GererUser(),
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
           '/choice_pm': (context) => ChoicePM(),
           '/create_pf': (context) => CreatePF(),
           '/fiche_technique_article': (context) => FicheTechArticle(),
+          '/problem_page': (context) => ProblemPage(),
         },
       ),
     );

@@ -10,6 +10,7 @@ class CreatePF extends StatelessWidget {
   Widget build(BuildContext context) {
     final pm = Provider.of<QuerySnapshot>(context);
     final formKey = GlobalKey<FormState>();
+    List snapshotsList = [];
     List selectedItems = [],
         refList = [],
         quantityList = [],
@@ -23,6 +24,7 @@ class CreatePF extends StatelessWidget {
     pm.docs.forEach((doc) {
       if (doc['clicked']) {
         selectedItems.add(doc);
+        snapshotsList.add(doc.id);
         int len = selectedItems.length;
         idList.add(doc.id);
         priceList.add(doc['price']);
@@ -31,7 +33,7 @@ class CreatePF extends StatelessWidget {
         quantityList.length = len;
       }
     });
-
+    print(snapshotsList);
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(
@@ -102,7 +104,7 @@ class CreatePF extends StatelessWidget {
                                 if (quantityList[index] != null) {}
                               },
                               validator: (val) => val.isEmpty
-                                  ? 'ce champ ne peut pas etre vmaide'
+                                  ? 'ce champ ne peut pas etre vide'
                                   : null,
                               decoration: InputDecoration(
                                 hintText:
@@ -131,15 +133,12 @@ class CreatePF extends StatelessWidget {
             };
 
             for (int i = 0; i < selectedItems.length; i++) {
-              //await UserData(id: idList[i]).changeQuantity(-quantityList[i]);
               cout += priceList[i] * quantityList[i];
             }
+
             await UserData().addFinalProduct(
-              myIngredients,
-              nomArticle,
-              cout,
-              litre,
-            );
+                myIngredients, nomArticle, cout, litre, snapshotsList);
+
             Navigator.popUntil(
               context,
               ModalRoute.withName('/produit_fini'),

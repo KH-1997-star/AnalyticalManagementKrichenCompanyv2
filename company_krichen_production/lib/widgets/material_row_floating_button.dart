@@ -112,32 +112,6 @@ class _RowFloatingButtonsState extends State<RowFloatingButtons> {
                                   label: Flexible(
                                       child: Text('changer fournisseur')),
                                 ),
-                                TextButton.icon(
-                                  onPressed: () {
-                                    alertShow(context, 'Attention',
-                                        'êtes-vous sûr de supprimer cet matière première',
-                                        () async {
-                                      await UserData(id: widget.id)
-                                          .deletePmDoc();
-
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.delete_outlined,
-                                    color: Colors.red,
-                                  ),
-                                  label: Flexible(
-                                    child: Text(
-                                      'suprimmer matière première',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
                           )

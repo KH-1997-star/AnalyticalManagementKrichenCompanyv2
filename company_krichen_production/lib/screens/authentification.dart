@@ -12,6 +12,7 @@ class Authentification extends StatefulWidget {
 }
 
 class _AuthentificationState extends State<Authentification> {
+  
   bool hidden = true, allowed = false;
   String cin = '';
 

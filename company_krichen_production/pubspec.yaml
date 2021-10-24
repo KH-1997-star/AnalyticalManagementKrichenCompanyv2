@@ -36,7 +36,11 @@ dependencies:
   image_picker: "^0.6.7+17"
   firebase_storage: "^7.0.0"
   firestore_search: 
-  flutter_svg: 
+  flutter_svg:
+  flutter_lints: ^1.0.4 
+  carousel_slider:
+  syncfusion_flutter_charts:
+   
 
 dev_dependencies:
   flutter_test:

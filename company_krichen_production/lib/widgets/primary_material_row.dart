@@ -33,7 +33,14 @@ class _PrimaryMaterialRowState extends State<PrimaryMaterialRow> {
             width: 5,
           ),
           Flexible(
-            child: Text(pm.docs[widget.index][widget.prop].toString()),
+            child: (widget.prop == 'quantity') &&
+                    !pm.docs[widget.index][widget.prop]
+                        .toString()
+                        .contains('.0')
+                ? Text(
+                    pm.docs[widget.index][widget.prop].toStringAsFixed(3),
+                  )
+                : Text(pm.docs[widget.index][widget.prop].toString()),
           ),
           widget.unity == 'L' ? Text(' L') : Text(''),
           widget.unity == 'kg' ? Text(' kg') : Text(''),

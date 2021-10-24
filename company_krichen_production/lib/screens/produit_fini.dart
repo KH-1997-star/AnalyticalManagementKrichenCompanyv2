@@ -1,11 +1,25 @@
 import 'package:company_krichen_production/models/final_product.dart';
+import 'package:company_krichen_production/utils/consts.dart';
 import 'package:company_krichen_production/widgets/add_pf_floating_button.dart';
-import 'package:company_krichen_production/widgets/articles_widget.dart';
+import 'package:company_krichen_production/widgets/normal_grid_view.dart';
+import 'package:company_krichen_production/widgets/searching_grid_view.dart';
 import 'package:company_krichen_production/widgets/wiating_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProduitFini extends StatelessWidget {
+class ProduitFini extends StatefulWidget {
+  @override
+  _ProduitFiniState createState() => _ProduitFiniState();
+}
+
+class _ProduitFiniState extends State<ProduitFini> {
+  bool searching = false;
+  List searchingList = [],
+      indexList = [],
+      imageList = [],
+      coutList = [],
+      currencyList = [];
+
   @override
   Widget build(BuildContext context) {
     final pf = Provider.of<List<FinalProduct>>(context);
@@ -16,26 +30,54 @@ class ProduitFini extends StatelessWidget {
             appBar: AppBar(
               title: Text('Produit Fini'),
               actions: [
-                IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                IconButton(
+                    onPressed: () {
+                      setState(() {
+                        searching = !searching;
+                      });
+                    },
+                    icon: Icon(Icons.search)),
               ],
             ),
             body: Column(
               children: [
+                searching
+                    ? TextField(
+                        onChanged: (val) {
+                          setState(() {
+                            myFinalProductSearchingFunction(
+                                pf,
+                                val,
+                                searchingList,
+                                indexList,
+                                imageList,
+                                coutList,
+                                currencyList);
+                          });
+                        },
+                        decoration: InputDecoration(
+                            hintText: 'searshing...',
+                            prefixIcon: Icon(Icons.search),
+                            suffixIcon: IconButton(
+                              onPressed: () => setState(() {
+                                searching = false;
+                              }),
+                              icon: Icon(Icons.cancel_outlined),
+                            )),
+                      )
+                    : Text(''),
                 Expanded(
-                  child: GridView.count(
-                      padding: EdgeInsets.only(
-                        right: 10,
-                        left: 10,
-                      ),
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 4.0,
-                      mainAxisSpacing: 4.0,
-                      crossAxisCount: 2,
-                      children: List.generate(pf.length, (index) {
-                        return ArticleWidget(
-                          index: index,
-                        );
-                      })),
+                  child: !searchingList.isEmpty && searching
+                      ? SearchingGridView(
+                          searchingList: searchingList,
+                          indexList: indexList,
+                          imageList: imageList,
+                          coutList: coutList,
+                          currencyList: currencyList,
+                        )
+                      : NormalGridView(
+                          pf: pf,
+                        ),
                 ),
               ],
             ),
