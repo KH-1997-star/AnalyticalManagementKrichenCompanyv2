@@ -146,13 +146,14 @@ class FicheTechArticle extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {
-                          List<String> alertList = [];
+                      onPressed: () {
+                        List<String> alertList = [];
 
-                          melangeChanger(doc, pmList, lenTab.length, context,
-                              alertList, data['id']);
-                        },
-                        child: Text('crée un mélange'))
+                        melangeChanger(doc, pmList, lenTab.length, context,
+                            alertList, data['id']);
+                      },
+                      child: Text('crée un mélange'),
+                    )
                   ],
                 ),
               );

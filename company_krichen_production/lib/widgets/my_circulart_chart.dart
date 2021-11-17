@@ -20,11 +20,13 @@ class _MyCircularChartState extends State<MyCircularChart> {
 
   Widget build(BuildContext context) {
     return SfCircularChart(
+      
       title: ChartTitle(text: 'statistique de mélange crée par article'),
       legend:
           Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
       tooltipBehavior: _tooltipBehavior,
       series: <CircularSeries>[
+        
         DoughnutSeries<FinalProduct, String>(
           dataSource: widget.pf,
           xValueMapper: (FinalProduct data, _) => data.article,

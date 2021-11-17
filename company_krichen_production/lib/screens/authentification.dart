@@ -12,7 +12,6 @@ class Authentification extends StatefulWidget {
 }
 
 class _AuthentificationState extends State<Authentification> {
-  
   bool hidden = true, allowed = false;
   String cin = '';
 
@@ -50,6 +49,7 @@ class _AuthentificationState extends State<Authentification> {
                   SizedBox(
                     width: 300,
                     child: TextFormField(
+
                       keyboardType: TextInputType.number,
                       validator: (value) =>
                           value.isEmpty ? 'cin non écrit' : null,
@@ -57,6 +57,7 @@ class _AuthentificationState extends State<Authentification> {
                       maxLength: 8,
                       obscureText: hidden,
                       decoration: InputDecoration(
+                        
                         prefixIcon: Icon(Icons.perm_identity_rounded),
                         suffixIcon: ObscureText(
                           obscureText: () {
@@ -64,6 +65,15 @@ class _AuthentificationState extends State<Authentification> {
                               hidden = !hidden;
                             });
                           },
+                        ),
+                        
+                        enabledBorder: OutlineInputBorder(
+                          
+                          borderSide: BorderSide(
+                            
+                            color: Colors.red,
+                            width: 2.0,
+                          ),
                         ),
                         border: OutlineInputBorder(),
                       ),
